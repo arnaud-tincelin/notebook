@@ -327,8 +327,9 @@ class ZMQChannelsHandler(AuthenticatedZMQStreamHandler):
         channel = getattr(stream, 'channel', None)
         msg_type = msg['header']['msg_type']
 
+        # https://github.com/jupyterhub/jupyterhub/issues/2562
         if msg_type == 'execute_input':
-           self.log.critical("TRAK: %s", json.dumps({'who': msg['header']['username'], 'what': msg['content']['code'], 'where': self.session_manager.get_session(kernel_id=self.kernel_id)['path'], 'when': str(msg['header']['date'])}))
+           self.log.critical("TRAK: %s", json.dumps({'who': msg['header']['username'], 'what': msg['content']['code'], 'when': str(msg['header']['date'])}))
 
         if channel == 'iopub' and msg_type == 'status' and msg['content'].get('execution_state') == 'idle':
             # reset rate limit counter on status=idle,
