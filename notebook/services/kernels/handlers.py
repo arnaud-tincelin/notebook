@@ -329,6 +329,8 @@ class ZMQChannelsHandler(AuthenticatedZMQStreamHandler):
 
         # https://github.com/jupyterhub/jupyterhub/issues/2562
         if msg_type == 'execute_input':
+            for header in msg['header']:
+                self.log.critical("TRAK: %s", header)
            self.log.critical("TRAK: %s", json.dumps({'who': msg['header']['username'], 'what': msg['content']['code'], 'when': str(msg['header']['date'])}))
 
         if channel == 'iopub' and msg_type == 'status' and msg['content'].get('execution_state') == 'idle':
